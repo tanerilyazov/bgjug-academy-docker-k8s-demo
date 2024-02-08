@@ -1,0 +1,21 @@
+version: "3.0"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile-multistage
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/petclinic
+      - SPRING_PROFILES_ACTIVE=postgres
+  postgres:
+    image: postgres:16.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_DB=petclinic

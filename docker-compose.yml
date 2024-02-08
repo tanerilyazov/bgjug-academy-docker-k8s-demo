@@ -1,0 +1,53 @@
+version: "3.0"
+
+services:
+  app-mysql:
+    build:
+      dockerfile: Dockerfile-multistage
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/petclinic
+      - SPRING_PROFILES_ACTIVE=mysql
+    restart: on-failure
+    depends_on:
+      - mysql
+    profiles:
+      - app-mysql
+  mysql:
+    image: mysql:8.2
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=petclinic
+      - MYSQL_PASSWORD=petclinic
+      - MYSQL_DATABASE=petclinic
+    volumes:
+      - "./conf.d:/etc/mysql/conf.d:ro"
+    profiles:
+      - mysql
+  app-postgres:
+    build:
+      dockerfile: Dockerfile-multistage
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/petclinic
+      - SPRING_PROFILES_ACTIVE=postgres
+    restart: on-failure
+    depends_on:
+      - postgres
+    profiles:
+      - app-postgres
+  postgres:
+    image: postgres:16.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_DB=petclinic
+    profiles:
+      - postgres
