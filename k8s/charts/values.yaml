@@ -1,0 +1,19 @@
+namespace: petclinic
+app:
+  name: petclinic
+  image: petclinic
+  tag: latest
+  pullPolicy: IfNotPresent
+  port: 8080
+  serviceType: LoadBalancer
+  replicas: 4
+db:
+  name: postgres
+  image: postgres
+  tag: latest
+  port: 5432
+  serviceType: ClusterIP
+  replicas: 1
+  username: petclinic
+  password: petclinic
+  database: petclinic

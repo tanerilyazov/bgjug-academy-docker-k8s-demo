@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  namespace: petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_USER
+              value: "petclinic"
+            - name: POSTGRES_PASSWORD
+              value: "petclinic"
+            - name: POSTGRES_DB
+              value: "petclinic"
+          image: postgres
+          imagePullPolicy: Always
+          name: postgres
+          ports:
+            - containerPort: 1433
+      restartPolicy: Always
